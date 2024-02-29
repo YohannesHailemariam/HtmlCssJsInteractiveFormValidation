@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Interactive Form Validation</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+            *{
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: Poppins;
+            }
+
+            .container {
+                margin-top: 30px;
+                background-color: #fff;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                width: 400px;
+                max-width: 100%;
+            }
+
+            form {
+                padding: 30px 40px;
+            }
+
+            .form-control{
+                margin-bottom: 10px;
+                padding-bottom: 20px;
+                position: relative;
+            }
+
+            .form-control label {
+                display: inline-block;
+                margin-bottom: 5px;
+            }
+
+            .form-control input {
+                border: 2px solid #f0f0f0;
+                border-radius: 4px;
+                display: block;
+                width: 100%;
+                padding: 10px;
+                font-size: 14px;
+                font-family: inherit;
+            }
+
+            .form-control.success input{
+                border-color: #2ecc71;
+            }
+
+            .form-control.error input{
+                border-color: #e74c3c;
+            }
+
+            .form-control.success i.fa-circle-check {
+                visibility: visible;
+                color: #2ecc71;
+            }
+
+            .form-control.error i.fa-circle-exclamation {
+                visibility: visible;
+                color: #e74c3c;
+            }
+
+            .form-control i {
+                position: absolute;
+                top: 45px;
+                visibility: hidden;
+                right: 10px;
+            }
+
+            .form-control.error small {
+                visibility: visible;
+            }
+
+            .form-control small {
+                position: absolute;
+                bottom: 0;
+                visibility: hidden;
+                left: 0;
+                color: #e74c3c;
+            }
+
+            form input[type="submit"] {
+                background-color: #b2003d;
+                color: #fff;
+                padding: 10px;
+                width: 100%;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-family: inherit;
+            }
+
+            @media (max-width: 43em) {
+                .body {
+                    flex-direction: column-reverse;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="createAccount">
+            <div class="container">
+                <form>
+                    <div class="form-control">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" placeholder="eg: Joe" />
+                        <i class="fa-regular fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <small>Error Message</small>
+                    </div>
+
+                    <div class="form-control">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" placeholder="eg: Doe" />
+                        <i class="fa-regular fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <small>Error Message</small>
+                    </div>
+
+                    <div class="form-control">
+                        <label for="email">Email</label>
+                        <input type="text" id="email" placeholder="eg: xyz@gmail.com">
+                        <i class="fa-regular fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <small>Error Message</small>
+                    </div>
+
+                    <div class="form-control">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="password" />
+                        <i class="fa-regular fa-circle-check"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <small>Error Message</small>
+                    </div>
+                    <input type="submit" value="Create an account" />
+                </form>
+            </div>
+        </div>
+        <script>
+            const form = document.querySelector("form");
+            const firstName = document.querySelector("#firstName");
+            const lastName = document.querySelector("#lastName");
+            const email = document.querySelector("#email");
+            const password = document.querySelector("#password");
+
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+                checkInputs();
+            });
+
+            function checkInputs() {
+                const firstNameValue = firstName.value.trim();
+                const lastNameValue = lastName.value.trim();
+                const emailValue = email.value.trim();
+                const passwordValue = password.value.trim();
+
+                if (firstNameValue === "") {
+                    setError(firstName, "First name can't be empty");
+                } else if (!inputValidity(firstNameValue, "name")) {
+                    setError(firstName, "First name is invalid");
+                } else {
+                    setSuccess(firstName);
+                }
+
+                if (lastNameValue === "") {
+                    setError(lastName, "Last name can't be empty");
+                    } else if (!inputValidity(lastNameValue, "name")) {
+                    setError(lastName, "Last name is invalid");
+                    } else {
+                    setSuccess(lastName);
+                }
+
+                if (emailValue === "") {
+                    setError(email, "Email can't be empty");
+                    } else if (!inputValidity(emailValue, "email")) {
+                    setError(email, "Email is invalid");
+                    } else {
+                    setSuccess(email);
+                }
+
+                if (passwordValue === "") {
+                    setError(password, "Password can't be empty");
+                    } else if (!inputValidity(passwordValue, "password")) {
+                    setError(password, "Password is invalid");
+                    } else {
+                    setSuccess(password);
+                }
+            }
+
+            function setError(element, message) {
+                const formControl = element.parentElement;
+                const small = formControl.querySelector("small");
+
+                formControl.className = "form-control error";
+                small.innerText = message;
+            }
+            function setSuccess(element) {
+                const formControl = element.parentElement;
+                formControl.className = "form-control success";
+            }
+
+            function inputValidity(inputValue, inputName) {
+                if (inputName === "name") {
+                    if (inputValue.length < 3) {
+                        return false;
+                    }
+                        return true;
+                    }
+
+                if (inputName === "email") {
+                    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(inputValue);
+                }
+
+                if (inputName === "password") {
+                    console.log(inputValue);
+                    return /[a-zA-Z0-9]{6,10}/.test(inputValue);
+                }
+            }
+
+        </script>   
+    </body>
+</html>
